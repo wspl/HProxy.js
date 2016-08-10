@@ -5,6 +5,8 @@ var app = express();
 
 app.all('*', function (req, res) {
   var originUrl = req.header('origin-url');
+
+  console.log('proxy: ' + originUrl);
   
   if (!originUrl) {
     res.end('H');
