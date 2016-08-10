@@ -1,8 +1,24 @@
-var express = require('express')
-var app = express()
+var express = require('express');
+var request = require('request');
+var url = require('url');
+var app = express();
 
 app.all('*', function (req, res) {
-  res.send('Hello World')
+  var originUrl = req.header('origin-url');
+  
+  if (!originUrl) {
+    res.end('H');
+    return;
+  }
+
+  var target = url.parse(originUrl);
+  var headers = req.headers;
+  headers.host = target.host;
+  request({
+    method: req.method,
+    url: originUrl,
+    headers: headers
+  }).pipe(res);
 })
 
-app.listen(process.env.PORT || 5000)
+app.listen(process.env.PORT || 5000);
